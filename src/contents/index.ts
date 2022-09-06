@@ -5,4 +5,7 @@ export const config: PlasmoContentScript = {
   all_frames: true
 }
 
-console.log('here')
+window.addEventListener('load', () => {
+  const elements = Array.from(document.querySelectorAll('span'))
+  elements.forEach(element => element.style.color = 'red')
+})

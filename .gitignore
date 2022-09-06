@@ -9,6 +9,9 @@
 # testing
 /coverage
 
+# IDE
+.idea
+
 #cache
 .turbo
 .next

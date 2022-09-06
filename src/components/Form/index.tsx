@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react"
 import { Input, Button } from 'antd'
 
+import styles from './styles.module.scss'
+
 export function Form() {
   const [tagName, setTagName] = useState("")
   const [color, setColor] = useState("")
@@ -14,7 +16,7 @@ export function Form() {
   }, [])
 
   return (
-    <div>
+    <div className={styles.root}>
       <Input value={tagName} onChange={changeTagHandler} placeholder='Селектор' />
       <Input value={color} onChange={changeColorHandler} placeholder='Цвет' />
       <Button>Применить</Button>

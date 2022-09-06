@@ -3,7 +3,11 @@ import { Input, Button } from 'antd'
 
 import styles from './styles.module.scss'
 
-export function Form() {
+interface Props {
+  onSubmit(tagName: string, color: string): void
+}
+
+export function Form({ onSubmit }: Props) {
   const [tagName, setTagName] = useState("")
   const [color, setColor] = useState("")
 
@@ -15,11 +19,21 @@ export function Form() {
     setColor(event.target.value)
   }, [])
 
+  const submitHandler = useCallback(() => {
+    onSubmit(tagName, color)
+  }, [onSubmit, tagName, color])
+
   return (
     <div className={styles.root}>
       <Input value={tagName} onChange={changeTagHandler} placeholder='Селектор' />
       <Input value={color} onChange={changeColorHandler} placeholder='Цвет' />
-      <Button>Применить</Button>
+      <Button
+        type='primary'
+        onClick={submitHandler}
+        disabled={!tagName || !color}
+      >
+        Применить
+      </Button>
     </div>
   )
 }

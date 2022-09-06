@@ -5,14 +5,26 @@ export const config: PlasmoContentScript = {
   all_frames: true
 }
 
-export interface IMessage {
-  type: string;
-  payload: unknown;
+class Actions {
+  public changeColor(tagName: string, color: string) {
+    const elements = Array.from(document.querySelectorAll(tagName)) as HTMLElement[]
+    elements.forEach(element => element.style.color = color)
+  }
 }
 
-chrome.runtime.onMessage.addListener((message: IMessage, sender: unknown, sendResponse: unknown) => {
-  if (message.type === 'changeColor') {
-    const elements = Array.from(document.querySelectorAll('span'))
-    elements.forEach(element => element.style.color = 'red')
+const action = new Actions()
+
+type SendResponse = (errorMessage: string) => void
+export type ActionType = keyof Actions
+export interface IMessage<T extends ActionType = any> {
+  type: T;
+  payload: Parameters<Actions[T]>;
+}
+
+chrome.runtime.onMessage.addListener((message: IMessage, sender: unknown, sendResponse: SendResponse) => {
+  try {
+    action[message.type].apply(this, message.payload)
+  } catch (e) {
+    sendResponse(e.message)
   }
 })

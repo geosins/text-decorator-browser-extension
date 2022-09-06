@@ -5,7 +5,14 @@ export const config: PlasmoContentScript = {
   all_frames: true
 }
 
-window.addEventListener('load', () => {
-  const elements = Array.from(document.querySelectorAll('span'))
-  elements.forEach(element => element.style.color = 'red')
+export interface IMessage {
+  type: string;
+  payload: unknown;
+}
+
+chrome.runtime.onMessage.addListener((message: IMessage, sender: unknown, sendResponse: unknown) => {
+  if (message.type === 'changeColor') {
+    const elements = Array.from(document.querySelectorAll('span'))
+    elements.forEach(element => element.style.color = 'red')
+  }
 })
